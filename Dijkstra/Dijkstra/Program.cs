@@ -7,6 +7,8 @@ namespace Dijkstra
         static void Main(string[] args)
         {
             Console.WriteLine("===============Dijkstra===============");
+            Console.WriteLine("======================================");
+
         }
     }
 }
