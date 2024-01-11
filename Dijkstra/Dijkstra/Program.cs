@@ -64,6 +64,13 @@ namespace Dijkstra
 
             return idx;
         }
+
+        public bool isEmpty()
+        {
+            if (items.Count == 0)
+                return true;
+            return false;
+        }
     }
 
     class Graph
@@ -99,8 +106,31 @@ namespace Dijkstra
 
         public void dijkstra(int start)
         {
-            
+            dist[start] = 0;
 
+            PriorityQueue pq = new PriorityQueue();
+            pq.Enqueue(0, start);
+
+            while(!pq.isEmpty())
+            {
+                int[] now = pq.Peak();
+                int distNow = now[0];
+                int vertexNow = now[1];
+                pq.Dequeue();
+
+                for(int i=0; i<size; i++)
+                {
+                    int weight = weights[vertexNow, i];
+                    if (weight != Constants.INF)
+                    {
+                        if((weight+ distNow) < dist[i])
+                        {
+                            dist[i] = weight + distNow;
+                            pq.Enqueue(dist[i], i);
+                        }
+                    }
+                }
+            }
         }
 
         public void prtGraph()
@@ -116,6 +146,12 @@ namespace Dijkstra
                 }
                 Console.WriteLine();
             }
+        }
+
+        public void prtDist()
+        {
+            for(int i=0; i<size;i++)
+                Console.Write("{0, 5}", dist[i]);
         }
     }
 
@@ -180,6 +216,11 @@ namespace Dijkstra
                     break;
             }
             graph.dijkstra(start);
+            Console.WriteLine();
+
+            Console.WriteLine("최단 거리 계산 결과");
+            graph.prtDist();
+            Console.WriteLine();
 
             Console.WriteLine("======================================");
 
