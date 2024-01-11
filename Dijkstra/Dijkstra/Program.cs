@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
-
+using System.Collections.Generic;
 
 namespace Dijkstra
 {
@@ -11,10 +9,68 @@ namespace Dijkstra
         public const int INF = 1000000;
     }
 
+    /*
+    * 우선순위큐 - 리스트로 구현
+    * Item - 정점번호와 해당 정점의 최단거리 저장
+    * 우선순위큐 - Item을 저장하는 리스트
+    * Dequeue() : 우선순위가 높은(최단거리가 가장 작은) Item 삭제
+    * Peak() : 우선순위가 높은 Item의 최단거리, 정점 번호 반환
+    */
+    class Item
+    {
+        public int Dist { get; set; } //정점의 dist(최단거리) 값
+        public int Vertex { get; set; } //정점 번호
+    }
+    class PriorityQueue
+    {
+        private List<Item> items;
+        
+        public PriorityQueue()
+        {
+            items = new List<Item>();
+        }
+
+        public void Enqueue(int dist, int vertex)
+        {
+            items.Add(new Item { Dist = dist, Vertex = vertex });
+        }
+
+        public void Dequeue() //dist값이 작은것부터 삭제
+        {
+            int idx = getIndex();
+            items.RemoveAt(idx);
+        }
+
+        public int[] Peak()
+        {
+            int idx = getIndex();
+            int[] peak = { items[idx].Dist, items[idx].Vertex };
+            return peak;
+        }
+
+        public int getIndex() //dist 값이 작은 인덱스 반환
+        {
+            int min = items[0].Dist;
+            int idx = 0;
+
+            for(int i=1; i<items.Count; i++)
+            {
+                if(min > items[i].Dist)
+                {
+                    min = items[i].Dist;
+                    idx = i;
+                }
+            }
+
+            return idx;
+        }
+    }
+
     class Graph
     {
         private int size; //정점 개수
         private int[,] weights;  //정점 간의 간선 가중치
+        private int[] dist; //최단 거리
 
         public Graph() { 
             size = 0;
@@ -23,17 +79,28 @@ namespace Dijkstra
         public Graph(int size) { 
             this.size = size;
             weights = new int[size, size];
+            dist = new int[size];
 
-            // 간선 가중치값 무한대로 초기화
+            // 간선 가중치, 최단거리 무한대로 초기화
             for (int i = 0; i < size; i++)
+            {
+                dist[i] = Constants.INF; 
                 for (int j = 0; j < size; j++)
                     weights[i, j] = Constants.INF;
+            }
+
         }
 
         public void setWeights(int i, int j, int weight)
         {
             weights[i, j] = weight;
             weights[j, i] = weight;
+        }
+
+        public void dijkstra(int start)
+        {
+            
+
         }
 
         public void prtGraph()
@@ -100,6 +167,19 @@ namespace Dijkstra
             Console.WriteLine("<가중치 그래프 출력>");
             graph.prtGraph();
             Console.WriteLine();
+
+            Console.WriteLine("<다익스트라 알고리즘 실행>");
+            int start;
+            while (true) 
+            {
+                Console.Write("출발 정점 선택 : ");
+                start = Int32.Parse(Console.ReadLine());
+                if (start < 0 || start >= size)
+                    Console.WriteLine("정점 번호를 잘못 입력하였습니다. 다시 입력해주세요.");
+                else
+                    break;
+            }
+            graph.dijkstra(start);
 
             Console.WriteLine("======================================");
 
