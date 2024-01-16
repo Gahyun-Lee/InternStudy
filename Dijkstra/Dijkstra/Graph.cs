@@ -8,7 +8,7 @@ namespace Dijkstra
         private int size; //정점 개수
         private int start; //출발 지점
         private int[,] weights;  //정점 간의 간선 가중치
-        private int[] dist; //최단 거리
+        private Item[] dist; //최단 거리
 
         public Graph() { 
             size = 0;
@@ -18,16 +18,17 @@ namespace Dijkstra
             this.size = size;
             this.start = start;
             weights = new int[size, size];
-            dist = new int[size];
+            dist = new Item[size];
 
             // 간선 가중치, 최단거리 무한대로 초기화
             for (int i = 0; i < size; i++)
             {
-                dist[i] = Constants.INF; 
+                dist[i] = new Item();
+                dist[i].Vertex = i;
+                dist[i].Dist = Constants.INF;
                 for (int j = 0; j < size; j++)
                     weights[i, j] = Constants.INF;
             }
-
         }
 
         public void setWeights(List<Node> nodes)
@@ -39,19 +40,19 @@ namespace Dijkstra
             }
         }
 
-        public int[] getDist()
+        public Item[] getDist()
         {
             return dist;
         }
 
         public void dijkstra()
         {
-            dist[start] = 0;
+            dist[start].Dist = 0;
 
             PriorityQueue pq = new PriorityQueue();
             pq.Enqueue(0, start);
 
-            while(!pq.isEmpty())
+            while(!pq.IsEmpty())
             {
                 int[] now = pq.Peak();
                 int distNow = now[0];
@@ -63,10 +64,10 @@ namespace Dijkstra
                     int weight = weights[vertexNow, i];
                     if (weight != Constants.INF)
                     {
-                        if((weight+ distNow) < dist[i])
+                        if((weight+ distNow) < dist[i].Dist)
                         {
-                            dist[i] = weight + distNow;
-                            pq.Enqueue(dist[i], i);
+                            dist[i].Dist = weight + distNow;
+                            pq.Enqueue(dist[i].Dist, i);
                         }
                     }
                 }
@@ -91,7 +92,7 @@ namespace Dijkstra
         public void prtDist()
         {
             for(int i=0; i<size;i++)
-                Console.Write("{0, 5}", dist[i]);
+                Console.Write("{0, 5}", dist[i].Dist);
         }
     }
 }

@@ -1,9 +1,12 @@
-﻿class Dist
+﻿using Dijkstra;
+
+class Dist
 {
-    public int[] dist { get; set; }
+    public int start {  get; set; }
+    public Item[] dist { get; set; }
 
     public Dist(int size)
     {
-        dist = new int[size];
+        dist = new Item[size];
     }
 }
