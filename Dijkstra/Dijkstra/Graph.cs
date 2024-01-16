@@ -7,12 +7,9 @@ namespace Dijkstra
     {
         private int size; //정점 개수
         private int start; //출발 지점
-        private int[,] weights;  //정점 간의 간선 가중치
-        private Dist[] dist; //최단 거리
+        private readonly int[,] weights;  //정점 간의 간선 가중치
+        private readonly Dist[] dist; //최단 거리
 
-        public Graph() { 
-            size = 0;
-        }
 
         public Graph(int size, int start) { 
             this.size = size;
@@ -33,8 +30,14 @@ namespace Dijkstra
 
         public void SetWeights(List<Node> nodes)
         {
+            if (nodes == null)
+                return;
+
             foreach(Node node in nodes)
             {
+                if (node == null)
+                    continue;
+
                 weights[node.Vertex1, node.Vertex2] = node.Weight;
                 weights[node.Vertex2, node.Vertex1] = node.Weight;
             }
