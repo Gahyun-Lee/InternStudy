@@ -37,10 +37,10 @@ namespace Dijkstra
             dist.dist = graph.GetDist();
 
             string resultFile = @"json\result.json";
-            string result = JsonSerializer.Serialize(dist);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string result = JsonSerializer.Serialize(dist, options);
             File.WriteAllText(resultFile, result);
             Console.WriteLine("======================================");
-
         }
     }
 }
