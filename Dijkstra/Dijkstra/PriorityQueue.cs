@@ -4,41 +4,41 @@ namespace Dijkstra
 {
     class PriorityQueue
     {
-        private List<Item> items;
+        private List<Dist> items;
         
         public PriorityQueue()
         {
-            items = new List<Item>();
+            items = new List<Dist>();
         }
 
         public void Enqueue(int dist, int vertex)
         {
-            items.Add(new Item { Dist = dist, Vertex = vertex });
+            items.Add(new Dist { Distance = dist, Vertex = vertex });
         }
 
         public void Dequeue() //dist값이 작은것부터 삭제
         {
-            int idx = getIndex();
+            int idx = GetIndex();
             items.RemoveAt(idx);
         }
 
         public int[] Peak()
         {
-            int idx = getIndex();
-            int[] peak = { items[idx].Dist, items[idx].Vertex };
+            int idx = GetIndex();
+            int[] peak = { items[idx].Distance, items[idx].Vertex };
             return peak;
         }
 
-        public int getIndex() //dist 값이 작은 인덱스 반환
+        public int GetIndex() //dist 값이 작은 인덱스 반환
         {
-            int min = items[0].Dist;
+            int min = items[0].Distance;
             int idx = 0;
 
             for(int i=1; i<items.Count; i++)
             {
-                if(min > items[i].Dist)
+                if(min > items[i].Distance)
                 {
-                    min = items[i].Dist;
+                    min = items[i].Distance;
                     idx = i;
                 }
             }
@@ -46,7 +46,7 @@ namespace Dijkstra
             return idx;
         }
 
-        public bool isEmpty()
+        public bool IsEmpty()
         {
             if (items.Count == 0)
                 return true;

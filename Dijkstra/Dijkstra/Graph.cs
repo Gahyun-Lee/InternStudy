@@ -8,7 +8,7 @@ namespace Dijkstra
         private int size; //정점 개수
         private int start; //출발 지점
         private int[,] weights;  //정점 간의 간선 가중치
-        private Item[] dist; //최단 거리
+        private Dist[] dist; //최단 거리
 
         public Graph() { 
             size = 0;
@@ -18,20 +18,20 @@ namespace Dijkstra
             this.size = size;
             this.start = start;
             weights = new int[size, size];
-            dist = new Item[size];
+            dist = new Dist[size];
 
             // 간선 가중치, 최단거리 무한대로 초기화
             for (int i = 0; i < size; i++)
             {
-                dist[i] = new Item();
+                dist[i] = new Dist();
                 dist[i].Vertex = i;
-                dist[i].Dist = Constants.INF;
+                dist[i].Distance = Constants.INF;
                 for (int j = 0; j < size; j++)
                     weights[i, j] = Constants.INF;
             }
         }
 
-        public void setWeights(List<Node> nodes)
+        public void SetWeights(List<Node> nodes)
         {
             foreach(Node node in nodes)
             {
@@ -40,14 +40,14 @@ namespace Dijkstra
             }
         }
 
-        public Item[] getDist()
+        public Dist[] GetDist()
         {
             return dist;
         }
 
-        public void dijkstra()
+        public void Dijkstra()
         {
-            dist[start].Dist = 0;
+            dist[start].Distance = 0;
 
             PriorityQueue pq = new PriorityQueue();
             pq.Enqueue(0, start);
@@ -64,17 +64,17 @@ namespace Dijkstra
                     int weight = weights[vertexNow, i];
                     if (weight != Constants.INF)
                     {
-                        if((weight+ distNow) < dist[i].Dist)
+                        if((weight+ distNow) < dist[i].Distance)
                         {
-                            dist[i].Dist = weight + distNow;
-                            pq.Enqueue(dist[i].Dist, i);
+                            dist[i].Distance = weight + distNow;
+                            pq.Enqueue(dist[i].Distance, i);
                         }
                     }
                 }
             }
         }
 
-        public void prtGraph()
+        public void PrtGraph()
         {
             for (int i = 0; i < size; i++)
             {
@@ -89,10 +89,10 @@ namespace Dijkstra
             }
         }
 
-        public void prtDist()
+        public void PrtDist()
         {
             for(int i=0; i<size;i++)
-                Console.Write("{0, 5}", dist[i].Dist);
+                Console.Write("{0, 5}", dist[i].Distance);
         }
     }
 }
