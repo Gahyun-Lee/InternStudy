@@ -9,7 +9,7 @@
     */
     class Dist
     {
-        public int Distance { get; set; } //정점의 distance(최단거리) 값
         public int Vertex { get; set; } //정점 번호
+        public int Distance { get; set; } //정점의 distance(최단거리) 값
     }
 }
