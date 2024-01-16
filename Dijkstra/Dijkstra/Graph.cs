@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Dijkstra
 {
     class Graph
     {
         private int size; //정점 개수
+        private int start; //출발 지점
         private int[,] weights;  //정점 간의 간선 가중치
         private int[] dist; //최단 거리
 
@@ -12,8 +14,9 @@ namespace Dijkstra
             size = 0;
         }
 
-        public Graph(int size) { 
+        public Graph(int size, int start) { 
             this.size = size;
+            this.start = start;
             weights = new int[size, size];
             dist = new int[size];
 
@@ -27,13 +30,21 @@ namespace Dijkstra
 
         }
 
-        public void setWeights(int i, int j, int weight)
+        public void setWeights(List<Node> nodes)
         {
-            weights[i, j] = weight;
-            weights[j, i] = weight;
+            foreach(Node node in nodes)
+            {
+                weights[node.Vertex1, node.Vertex2] = node.Weight;
+                weights[node.Vertex2, node.Vertex1] = node.Weight;
+            }
         }
 
-        public void dijkstra(int start)
+        public int[] getDist()
+        {
+            return dist;
+        }
+
+        public void dijkstra()
         {
             dist[start] = 0;
 
