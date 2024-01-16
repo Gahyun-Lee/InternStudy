@@ -8,7 +8,7 @@ namespace Dijkstra
     {
         static void Main(string[] args)
         {
-            string json = File.ReadAllText("D:\\InternStudy\\Dijkstra\\Dijkstra\\json\\nodes2.json");
+            string json = File.ReadAllText(@".\json\nodes2.json");
 
             Input? input = JsonSerializer.Deserialize<Input>(json);
 
@@ -36,7 +36,7 @@ namespace Dijkstra
             Result dist = new Result(size);
             dist.dist = graph.GetDist();
 
-            string resultFile = "D:\\InternStudy\\Dijkstra\\Dijkstra\\json\\result.json";
+            string resultFile = @"json\result.json";
             string result = JsonSerializer.Serialize(dist);
             File.WriteAllText(resultFile, result);
             Console.WriteLine("======================================");
