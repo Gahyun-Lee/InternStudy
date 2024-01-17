@@ -6,26 +6,21 @@ namespace Dijkstra
     class Graph
     {
         private int size; //정점 개수
-        private int start; //출발 지점
+        private List<int> start; //출발 지점
         private readonly int[,] weights;  //정점 간의 간선 가중치
-        private readonly Dist[] dist; //최단 거리
+        //private readonly Dist[] dist; //최단 거리
+        private List<Result> results = new List<Result>(); //최단거리(출발, 도착, 거리 저장)
 
 
-        public Graph(int size, int start) { 
+        public Graph(int size, List<int> start) { 
             this.size = size;
             this.start = start;
             weights = new int[size, size];
-            dist = new Dist[size];
 
-            // 간선 가중치, 최단거리 무한대로 초기화
+            //간선 가중치, 최단거리 무한대로 초기화
             for (int i = 0; i < size; i++)
-            {
-                dist[i] = new Dist();
-                dist[i].Vertex = i;
-                dist[i].Distance = Constants.INF;
                 for (int j = 0; j < size; j++)
                     weights[i, j] = Constants.INF;
-            }
         }
 
         public void SetWeights(List<Node> nodes)
@@ -43,38 +38,54 @@ namespace Dijkstra
             }
         }
 
-        public Dist[] GetDist()
+        public List<Result> Dijkstra()
         {
-            return dist;
-        }
-
-        public void Dijkstra()
-        {
-            dist[start].Distance = 0;
-
-            PriorityQueue pq = new PriorityQueue();
-            pq.Enqueue(0, start);
-
-            while(!pq.IsEmpty())
+            foreach(int s in start)
             {
-                int[] now = pq.Peak();
-                int distNow = now[0];
-                int vertexNow = now[1];
-                pq.Dequeue();
-
-                for(int i=0; i<size; i++)
+                Dist[] dist = new Dist[size]; //최단 거리 계산을 위한 배열
+                
+                //거리 무한대로 초기화
+                for (int i = 0; i < size; i++)
                 {
-                    int weight = weights[vertexNow, i];
-                    if (weight != Constants.INF)
+                    dist[i] = new Dist();
+                    dist[i].Vertex = i;
+                    dist[i].Distance = Constants.INF;
+                }
+
+                dist[s].Distance = 0;
+
+                PriorityQueue pq = new PriorityQueue();
+                pq.Enqueue(0, s);
+
+                while (!pq.IsEmpty())
+                {
+                    int[] now = pq.Peak();
+                    int distNow = now[0];
+                    int vertexNow = now[1];
+                    pq.Dequeue();
+
+                    for (int i = 0; i < size; i++)
                     {
-                        if((weight+ distNow) < dist[i].Distance)
+                        int weight = weights[vertexNow, i];
+                        if (weight != Constants.INF)
                         {
-                            dist[i].Distance = weight + distNow;
-                            pq.Enqueue(dist[i].Distance, i);
+                            if ((weight + distNow) < dist[i].Distance)
+                            {
+                                dist[i].Distance = weight + distNow;
+                                pq.Enqueue(dist[i].Distance, i);
+                            }
                         }
                     }
                 }
+
+                //계산 결과 저장
+                Result result = new Result(size);
+                result.start = s;
+                result.dist = dist;
+                results.Add(result);
             }
+
+            return results;
         }
 
         public void PrtGraph()
@@ -94,8 +105,17 @@ namespace Dijkstra
 
         public void PrtDist()
         {
-            for(int i=0; i<size;i++)
-                Console.Write("{0, 5}", dist[i].Distance);
+            foreach (Result r in results)
+            {
+                Console.WriteLine("----------------");
+                Console.WriteLine("Start : {0}", r.start);
+                Console.WriteLine("Vertex : Distance");
+                foreach (Dist d in r.dist)
+                {
+                    Console.WriteLine("   {0}   :   {1}", d.Vertex, d.Distance);
+                }
+
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace Dijkstra
@@ -25,21 +27,16 @@ namespace Dijkstra
             Console.WriteLine();
 
             Console.WriteLine("<다익스트라 알고리즘 실행>");
-            graph.Dijkstra();
-            Console.WriteLine();
+            List<Result> result = graph.Dijkstra();
 
             Console.WriteLine("최단 거리 계산 결과");
             graph.PrtDist();
             Console.WriteLine();
 
-            //Json 파일에 저장
-            Result dist = new Result(size);
-            dist.dist = graph.GetDist();
-
             string resultFile = @"json\result.json";
             var options = new JsonSerializerOptions { WriteIndented = true };
-            string result = JsonSerializer.Serialize(dist, options);
-            File.WriteAllText(resultFile, result);
+            string resultJson = JsonSerializer.Serialize(result, options);
+            File.WriteAllText(resultFile, resultJson);
             Console.WriteLine("======================================");
         }
     }

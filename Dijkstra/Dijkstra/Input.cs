@@ -3,6 +3,6 @@
 class Input
 {
     public int Size { get; set; }
-    public int Start { get; set; }
+    public List<int>? Start { get; set; }
     public List<Node>? Nodes { get; set; }
 }
